@@ -4,3 +4,15 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+
+[[bin]]
+name = "01_dasar"
+path = "01_dasar/main.rs"
+
+[[bin]]
+name = "02_struktur_data"
+path = "02_struktur_data/main.rs"
+
+[[bin]]
+name = "03_fungsi"
+path = "03_fungsi/main.rs"
