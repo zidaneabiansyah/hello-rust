@@ -28,3 +28,7 @@ path = "05_traits/main.rs"
 [[bin]]
 name = "06_generics"
 path = "06_generics/main.rs"
+
+[[bin]]
+name = "07_lifetime"
+path = "07_lifetime/main.rs"
