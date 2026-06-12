@@ -36,3 +36,7 @@ path = "07_lifetime/main.rs"
 [[bin]]
 name = "08_error_handling"
 path = "08_error_handling/main.rs"
+
+[[bin]]
+name = "09_modules"
+path = "09_modules/main.rs"
