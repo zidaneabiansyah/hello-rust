@@ -24,3 +24,7 @@ path = "04_enum/main.rs"
 [[bin]]
 name = "05_traits"
 path = "05_traits/main.rs"
+
+[[bin]]
+name = "06_generics"
+path = "06_generics/main.rs"
