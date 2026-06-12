@@ -20,3 +20,7 @@ path = "03_fungsi/main.rs"
 [[bin]]
 name = "04_enum"
 path = "04_enum/main.rs"
+
+[[bin]]
+name = "05_traits"
+path = "05_traits/main.rs"
