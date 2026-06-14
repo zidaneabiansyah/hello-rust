@@ -40,3 +40,7 @@ path = "08_error_handling/main.rs"
 [[bin]]
 name = "09_modules"
 path = "09_modules/main.rs"
+
+[[bin]]
+name = "10_smart_pointers"
+path = "10_smart_pointers/main.rs"
