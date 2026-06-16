@@ -52,3 +52,7 @@ path = "11_iterators/main.rs"
 [[bin]]
 name = "12_testing"
 path = "12_testing/main.rs"
+
+[[bin]]
+name = "13_concurrency"
+path = "13_concurrency/main.rs"
