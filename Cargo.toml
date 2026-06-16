@@ -48,3 +48,7 @@ path = "10_smart_pointers/main.rs"
 [[bin]]
 name = "11_iterators"
 path = "11_iterators/main.rs"
+
+[[bin]]
+name = "12_testing"
+path = "12_testing/main.rs"
