@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+tokio = { version = "1", features = ["full"] }
 
 [[bin]]
 name = "01_dasar"
@@ -64,3 +65,11 @@ path = "14_string_file_io/main.rs"
 [[bin]]
 name = "15_std_collections"
 path = "15_std_collections/main.rs"
+
+[[bin]]
+name = "16_async_await"
+path = "16_async_await/main.rs"
+
+[[bin]]
+name = "17_macros"
+path = "17_macros/main.rs"
