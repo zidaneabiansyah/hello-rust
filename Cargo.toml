@@ -60,3 +60,7 @@ path = "13_concurrency/main.rs"
 [[bin]]
 name = "14_string_file_io"
 path = "14_string_file_io/main.rs"
+
+[[bin]]
+name = "15_std_collections"
+path = "15_std_collections/main.rs"
