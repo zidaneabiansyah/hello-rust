@@ -56,3 +56,7 @@ path = "12_testing/main.rs"
 [[bin]]
 name = "13_concurrency"
 path = "13_concurrency/main.rs"
+
+[[bin]]
+name = "14_string_file_io"
+path = "14_string_file_io/main.rs"
