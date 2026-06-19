@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rust REST API</title>
+<style>
+  * { margin: 0; box-sizing: border-box; }
+  body { font-family: system-ui, -apple-system, sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+  .container { background: #1e293b; padding: 32px; border-radius: 16px; width: 480px; box-shadow: 0 0 40px rgba(0,0,0,.4); }
+  h1 { font-size: 20px; font-weight: 600; color: #38bdf8; margin-bottom: 24px; }
+  form { display: flex; gap: 8px; margin-bottom: 20px; }
+  input { flex: 1; padding: 10px 14px; border: none; border-radius: 8px; background: #334155; color: #e2e8f0; font-size: 14px; outline: none; transition: .15s; }
+  input:focus { box-shadow: 0 0 0 2px #38bdf8; }
+  input::placeholder { color: #64748b; }
+  button { padding: 10px 16px; border: none; border-radius: 8px; background: #38bdf8; color: #0f172a; font-weight: 600; font-size: 14px; cursor: pointer; transition: .15s; }
+  button:hover { background: #7dd3fc; }
+  .item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; transition: .15s; cursor: pointer; }
+  .item:hover { background: #334155; }
+  .item .check { width: 20px; height: 20px; border: 2px solid #475569; border-radius: 4px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; transition: .15s; color: transparent; }
+  .item .check.done { background: #22c55e; border-color: #22c55e; color: #fff; }
+  .item .info { flex: 1; }
+  .item .info .nama { font-size: 14px; }
+  .item .info .deskripsi { font-size: 11px; color: #64748b; margin-top: 1px; }
+  .item .info .nama.done { text-decoration: line-through; color: #64748b; }
+  .item .del { width: 24px; height: 24px; border: none; background: none; color: #64748b; cursor: pointer; font-size: 16px; border-radius: 4px; transition: .15s; }
+  .item .del:hover { color: #ef4444; background: #450a0a; }
+  .empty { text-align: center; color: #64748b; font-size: 14px; padding: 32px 0; }
+  .desc-input { background: #334155; }
+  .status { text-align: center; font-size: 12px; color: #64748b; margin-top: 16px; }
+</style>
+</head>
+<body>
+<div class="container" id="app">
+  <h1>Rust REST API</h1>
+  <form id="form">
+    <div style="display:flex;flex-direction:column;gap:6px;flex:1">
+      <input id="inputNama" placeholder="Nama item..." required>
+      <input id="inputDesc" class="desc-input" placeholder="Deskripsi (opsional)">
+    </div>
+    <button type="submit">Tambah</button>
+  </form>
+  <div id="list"></div>
+  <div class="status" id="status">Loading...</div>
+</div>
+
+<script>
+const API = '/api/items';
+const list = document.getElementById('list');
+const status = document.getElementById('status');
+const form = document.getElementById('form');
+const inputNama = document.getElementById('inputNama');
+const inputDesc = document.getElementById('inputDesc');
+
+async function fetchItems() {
+  const res = await fetch(API);
+  return res.json();
+}
+
+async function createItem(data) {
+  const res = await fetch(API, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  return res.json();
+}
+
+async function updateItem(id, data) {
+  await fetch(`${API}/${id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+}
+
+async function deleteItem(id) {
+  await fetch(`${API}/${id}`, { method: 'DELETE' });
+}
+
+function render(items) {
+  if (items.length === 0) {
+    list.innerHTML = '<div class="empty">Belum ada item. Tambah item baru!</div>';
+    status.textContent = '0 item';
+    return;
+  }
+  list.innerHTML = items.map(item => `
+    <div class="item" data-id="${item.id}">
+      <div class="check ${item.selesai ? 'done' : ''}" data-action="toggle">${item.selesai ? '✓' : ''}</div>
+      <div class="info">
+        <div class="nama ${item.selesai ? 'done' : ''}">${escape(item.nama)}</div>
+        <div class="deskripsi">${escape(item.deskripsi || '(tanpa deskripsi)')}</div>
+      </div>
+      <button class="del" data-action="delete">✕</button>
+    </div>
+  `).join('');
+  status.textContent = `${items.filter(i => i.selesai).length}/${items.length} selesai`;
+}
+
+function escape(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const nama = inputNama.value.trim();
+  if (!nama) return;
+  await createItem({ nama, deskripsi: inputDesc.value.trim() });
+  inputNama.value = '';
+  inputDesc.value = '';
+  inputNama.focus();
+  load();
+});
+
+list.addEventListener('click', async (e) => {
+  const item = e.target.closest('.item');
+  if (!item) return;
+  const id = item.dataset.id;
+  const action = e.target.dataset.action;
+  if (action === 'toggle') {
+    await updateItem(id, { selesai: !item.querySelector('.check').classList.contains('done') });
+    load();
+  } else if (action === 'delete') {
+    await deleteItem(id);
+    load();
+  }
+});
+
+async function load() {
+  try {
+    const items = await fetchItems();
+    render(items);
+  } catch (err) {
+    list.innerHTML = '<div class="empty">Gagal fetch data</div>';
+    status.textContent = 'Error';
+  }
+}
+
+load();
+</script>
+</body>
+</html>

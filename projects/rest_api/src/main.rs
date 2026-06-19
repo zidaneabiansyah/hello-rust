@@ -2,11 +2,9 @@ mod db;
 mod handlers;
 mod models;
 
-use axum::{
-    routing::get,
-    Router,
-};
+use axum::{routing::get, Router};
 use tower_http::cors::CorsLayer;
+use tower_http::services::ServeDir;
 use tracing_subscriber::EnvFilter;
 
 use db::Db;
@@ -19,16 +17,20 @@ async fn main() {
 
     let db = Db::baru();
 
-    let app = Router::new()
+    let api_routes = Router::new()
         .route("/api/items", get(handlers::list_items).post(handlers::create_item))
         .route(
             "/api/items/{id}",
             get(handlers::get_item)
                 .patch(handlers::update_item)
                 .delete(handlers::delete_item),
-        )
+        );
+
+    let app = Router::new()
+        .merge(api_routes)
         .layer(CorsLayer::permissive())
-        .with_state(db);
+        .with_state(db)
+        .fallback_service(ServeDir::new("static"));
 
     let addr = "0.0.0.0:3000";
     tracing::info!("Server running on http://{}", addr);
