@@ -73,3 +73,23 @@ path = "16_async_await/main.rs"
 [[bin]]
 name = "17_macros"
 path = "17_macros/main.rs"
+
+[[bin]]
+name = "18_unsafe"
+path = "18_unsafe/main.rs"
+
+[[bin]]
+name = "19_trait_objects"
+path = "19_trait_objects/main.rs"
+
+[[bin]]
+name = "20_proc_macros"
+path = "20_proc_macros/main.rs"
+
+[[bin]]
+name = "21_ffi"
+path = "21_ffi/main.rs"
+
+[[bin]]
+name = "22_phantom_data"
+path = "22_phantom_data/main.rs"
