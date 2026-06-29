@@ -93,3 +93,19 @@ path = "21_ffi/main.rs"
 [[bin]]
 name = "22_phantom_data"
 path = "22_phantom_data/main.rs"
+
+[[bin]]
+name = "23_drop_raii"
+path = "23_drop_raii/main.rs"
+
+[[bin]]
+name = "24_pin_self_ref"
+path = "24_pin_self_ref/main.rs"
+
+[[bin]]
+name = "25_const_generics"
+path = "25_const_generics/main.rs"
+
+[[bin]]
+name = "26_typestate_advanced"
+path = "26_typestate_advanced/main.rs"
